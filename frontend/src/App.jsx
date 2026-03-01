@@ -27,7 +27,7 @@ import DeliveredOrders from './components/DeliveredOrders'
 
 
 
-export const serverURL = "http://localhost:8000"
+export const serverURL = "https://soez-backend.onrender.com"
 
 function App() {
   const {userData} = useSelector(state => state.user)
