@@ -5,7 +5,7 @@ import SignIn from './pages/SignIn'
 import ForgotPassword from './pages/ForgotPassword'
 import { Toaster } from "react-hot-toast";
 import useGetCurrentUser from './hooks/useGetCurrentUser'
-import Home from './pages/home'
+import Home from './pages/Home'
 import { useDispatch, useSelector } from 'react-redux'
 import useGetCity from './hooks/useGetCity'
 import useGetShop from './hooks/useGetShop'
