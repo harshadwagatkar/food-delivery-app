@@ -90,7 +90,11 @@ function UserDashboard() {
             </p>
 
             <button
-              onClick={() => popularSectionRef.current?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() =>
+                popularSectionRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                })
+              }
               className="mt-5 inline-flex items-center gap-2 bg-orange-500 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-orange-600 transition"
             >
               Explore Food
@@ -111,18 +115,27 @@ function UserDashboard() {
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {/* LOCATION LOADING */}
-            {locationStatus === "loading" && (
-              <p className="col-span-full text-center text-gray-500">
-                Detecting your location 📍
-              </p>
-            )}
-
-            {/* ITEMS LOADING */}
-            {locationStatus === "success" && itemsLoading && (
-              <p className="col-span-full text-center text-gray-500">
-                Loading items near you 🍽️
-              </p>
+            {/* LOCATION / ITEMS LOADING SKELETON */}
+            {(locationStatus === "loading" ||
+              (locationStatus === "success" && itemsLoading)) && (
+              <>
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl shadow-sm overflow-hidden animate-pulse"
+                  >
+                    <div className="h-40 bg-gray-200" />
+                    <div className="p-4 space-y-3">
+                      <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                      <div className="h-3 w-1/2 bg-gray-200 rounded" />
+                      <div className="flex justify-between items-center">
+                        <div className="h-5 w-16 bg-gray-200 rounded" />
+                        <div className="h-8 w-24 bg-gray-200 rounded-full" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
 
             {/* ITEMS LIST */}

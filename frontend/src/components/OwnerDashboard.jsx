@@ -11,7 +11,7 @@ function OwnerDashboard() {
   const [loadingShopBtn, setLoadingShopBtn] = useState(false);
   const [loadingFoodBtn, setLoadingFoodBtn] = useState(false);
 
-  const { shopData } = useSelector((state) => state.owner);
+  const { shopData, shopLoading } = useSelector((state) => state.owner);
   const { userData, socket, myOrders } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,7 +44,40 @@ function OwnerDashboard() {
     <div className="min-h-screen bg-[#fff6f2]">
       <OwnerNav showActions={!!shopData} />
 
-      {!shopData ? (
+      {shopLoading ? (
+        /* LOADING SKELETON */
+        <section className="px-4 py-6 space-y-6 animate-pulse">
+          {/* Heading skeleton */}
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-gray-200" />
+            <div className="h-7 w-48 bg-gray-200 rounded-lg" />
+          </div>
+
+          {/* Shop card skeleton */}
+          <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="h-[260px] w-full bg-gray-200" />
+            <div className="p-5 space-y-3">
+              <div className="h-5 w-40 bg-gray-200 rounded" />
+              <div className="h-4 w-64 bg-gray-200 rounded" />
+            </div>
+          </div>
+
+          {/* Food card skeletons */}
+          {[1, 2].map((i) => (
+            <div
+              key={i}
+              className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-4 flex gap-4"
+            >
+              <div className="w-24 h-24 rounded-xl bg-gray-200 shrink-0" />
+              <div className="flex-1 space-y-3 py-1">
+                <div className="h-4 w-32 bg-gray-200 rounded" />
+                <div className="h-3 w-48 bg-gray-200 rounded" />
+                <div className="h-3 w-20 bg-gray-200 rounded" />
+              </div>
+            </div>
+          ))}
+        </section>
+      ) : !shopData ? (
         /* EMPTY STATE */
         <div className="flex items-center justify-center px-4 py-20">
           <div className="bg-white rounded-3xl shadow-xl p-10 max-w-md w-full text-center">

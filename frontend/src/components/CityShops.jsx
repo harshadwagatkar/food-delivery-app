@@ -6,11 +6,14 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function CityShops() {
-  const { city } = useSelector(state => state.user);
+  const { city, locationStatus } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const [allShops, setAllShops] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const isLoading =
+    locationStatus === "loading" || (locationStatus === "success" && loading);
 
   useEffect(() => {
     const fetchShops = async () => {
@@ -18,7 +21,7 @@ function CityShops() {
         setLoading(true);
         const response = await axios.get(
           `${serverURL}/api/shop/get-shop-city/${city}`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         setAllShops(response.data);
@@ -38,18 +41,34 @@ function CityShops() {
   return (
     <div className="w-full bg-[#fff7f2] px-4 py-10">
       <div className="max-w-7xl mx-auto">
-        
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
           Restaurants Near You 🍽️
         </h2>
 
-        {/* LOADING */}
-        {loading && (
-          <p className="text-gray-500 text-center">Loading shops...</p>
+        {/* LOADING SKELETON */}
+        {isLoading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl shadow-sm overflow-hidden"
+              >
+                <div className="h-48 bg-gray-200" />
+                <div className="p-5 space-y-3">
+                  <div className="h-5 w-40 bg-gray-200 rounded" />
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-gray-200 rounded-full" />
+                    <div className="h-4 w-52 bg-gray-200 rounded" />
+                  </div>
+                  <div className="h-4 w-20 bg-gray-200 rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
         {/* SHOPS GRID */}
-        {!loading && allShops.length > 0 && (
+        {!isLoading && allShops.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {allShops.map((shop) => (
               <div
@@ -85,11 +104,13 @@ function CityShops() {
         )}
 
         {/* EMPTY STATE */}
-        {!loading && allShops.length === 0 && (
-          <div className="text-center text-gray-500 mt-20">
-            No shops available in your city 😔
-          </div>
-        )}
+        {!isLoading &&
+          allShops.length === 0 &&
+          locationStatus === "success" && (
+            <div className="text-center text-gray-500 mt-20">
+              No shops available in your city 😔
+            </div>
+          )}
       </div>
     </div>
   );
